@@ -1,4 +1,3 @@
-version: "3.9"
 services:
     frontend:
         build: .
@@ -6,13 +5,9 @@ services:
         working_dir: /workspace
         volumes:
             - ./backend:/workspace
-        environment:
-            - CHOKIDAR_USEPOLLING=true
         ports:
             - "127.0.0.1:8000:8000"
         restart: unless-stopped
         stdin_open: true
         tty: true
-        command: ["bash", "/workspace/init.sh"]
-volumes:
-    backend:
+        command: ["ash", "/workspace/init.sh"]
