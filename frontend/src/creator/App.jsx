@@ -4,45 +4,191 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 const materials = [
-  { id: 1, name: "Złoto żółte", class: "gold-yellow" },
-  { id: 2, name: "Złoto białe", class: "gold-white" },
-  { id: 3, name: "Złoto różowe", class: "gold-rose" },
-  { id: 4, name: "Platyna", class: "platinum" },
-  { id: 5, name: "Srebro", class: "silver" },
+  {
+    id: 1,
+    name: "Złoto żółte",
+    gradient: "radial-gradient(circle at 30% 30%, #f6e08d 0%, #d4af37 72%)",
+  },
+  {
+    id: 2,
+    name: "Złoto białe",
+    gradient: "radial-gradient(circle at 30% 30%, #ffffff 0%, #dfdfdf 72%)",
+  },
+  {
+    id: 3,
+    name: "Złoto różowe",
+    gradient: "radial-gradient(circle at 30% 30%, #efc1bc 0%, #d7938c 72%)",
+  },
+  {
+    id: 4,
+    name: "Platyna",
+    gradient: "radial-gradient(circle at 30% 30%, #b9dbe7 0%, #94d0f5 72%)",
+  },
+  {
+    id: 5,
+    name: "Srebro",
+    gradient: "radial-gradient(circle at 30% 30%, #e9e9e9 0%, #b7b7b7 72%)",
+  },
 ];
 
 function App() {
-  const [selected, setSelected] = useState(1);
-  const [open, setOpen] = useState(true);
+  const [selectedMaterial, setSelectedMaterial] = useState(1);
+  const [isOpen, setIsOpen] = useState(true);
+
+  const styles = {
+    page: {
+      minHeight: "100vh",
+      backgroundColor: "#ffffff",
+      padding: "24px",
+      fontFamily: "Arial, Helvetica, sans-serif",
+      color: "#1f1f1f",
+      boxSizing: "border-box",
+    },
+    wrapper: {
+      width: "100%",
+      maxWidth: "1280px",
+      margin: "0 auto",
+    },
+    title: {
+      fontSize: "34px",
+      fontWeight: 400,
+      margin: "0 0 18px 0",
+      color: "#1f1f1f",
+    },
+    box: {
+      backgroundColor: "#f8f6f1",
+      border: "1px solid #ebe7df",
+      padding: "28px 28px 18px 28px",
+    },
+    header: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "16px",
+      cursor: "pointer",
+      userSelect: "none",
+    },
+    sectionLabel: {
+      fontSize: "12px",
+      letterSpacing: "0.28em",
+      fontWeight: 600,
+      color: "#6c665f",
+    },
+    arrowButton: {
+      border: "none",
+      background: "transparent",
+      padding: 0,
+      width: "28px",
+      height: "28px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      color: "#6c665f",
+    },
+    grid: {
+      display: "grid",
+      gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+      gap: "12px",
+    },
+    card: {
+      minHeight: "110px",
+      backgroundColor: "#fbfaf7",
+      border: "1px solid #e6e0d6",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "12px",
+      padding: "12px 10px",
+      cursor: "pointer",
+      boxSizing: "border-box",
+    },
+    cardActive: {
+      border: "1.5px solid #6b6862",
+      backgroundColor: "#f8f6f1",
+    },
+    circle: {
+      width: "30px",
+      height: "30px",
+      borderRadius: "50%",
+      boxShadow:
+        "inset 0 2px 4px rgba(255,255,255,0.7), inset -3px -3px 6px rgba(0,0,0,0.08)",
+    },
+    name: {
+      fontSize: "14px",
+      color: "#2f2f2f",
+      lineHeight: 1.2,
+      textAlign: "center",
+    },
+    bottomLine: {
+      marginTop: "18px",
+      borderTop: "1px solid #ddd7cc",
+    },
+  };
 
   return (
-    <div className="wrapper">
-      <h1 className="title">Wybieracz materiału</h1>
+    <div style={styles.page}>
+      <div style={styles.wrapper}>
+        <h1 style={styles.title}>Wybieracz materiału</h1>
 
-      <div className="box">
-        <div className="box-header" onClick={() => setOpen(!open)}>
-          <span className="section">METAL</span>
-          <span className={`arrow ${open ? "open" : ""}`}>⌃</span>
+        <div style={styles.box}>
+          <div style={styles.header} onClick={() => setIsOpen((prev) => !prev)}>
+            <span style={styles.sectionLabel}>METAL</span>
+
+            <button type="button" style={styles.arrowButton} aria-label="Rozwiń lub zwiń">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                style={{
+                  transform: isOpen ? "rotate(0deg)" : "rotate(180deg)",
+                  transition: "transform 0.2s ease",
+                }}
+              >
+                <path
+                  d="M6 15L12 9L18 15"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {isOpen && (
+            <>
+              <div style={styles.grid}>
+                {materials.map((material) => {
+                  const isActive = selectedMaterial === material.id;
+
+                  return (
+                    <div
+                      key={material.id}
+                      onClick={() => setSelectedMaterial(material.id)}
+                      style={{
+                        ...styles.card,
+                        ...(isActive ? styles.cardActive : {}),
+                      }}
+                    >
+                      <div
+                        style={{
+                          ...styles.circle,
+                          background: material.gradient,
+                        }}
+                      />
+                      <span style={styles.name}>{material.name}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div style={styles.bottomLine} />
+            </>
+          )}
         </div>
-
-        {open && (
-          <>
-            <div className="grid">
-              {materials.map((m) => (
-                <div
-                  key={m.id}
-                  className={`card ${selected === m.id ? "active" : ""}`}
-                  onClick={() => setSelected(m.id)}
-                >
-                  <div className={`circle ${m.class}`} />
-                  <span>{m.name}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="line" />
-          </>
-        )}
       </div>
     </div>
   );
