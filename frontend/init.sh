@@ -19,7 +19,7 @@ if [ ! -f package.json ]; then
 fi
 
 # Instalacja zależności jeśli node_modules nie istnieje
-if [ ! -d node_modules ]; then
+if [ -z "$( ls -A './node_modules' )" ]; then
     echo "Instalacja zależności..."
     npm install
 fi

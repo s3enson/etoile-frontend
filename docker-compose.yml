@@ -1,28 +1,37 @@
-version: "3.9"
-
 services:
     frontend:
-        build: .
-        container_name: react-dev
+        build:
+            context: .
+            dockerfile: frontend/Dockerfile
+        container_name: etoile-frontend
         working_dir: /workspace
-
         volumes:
-            - ./app:/workspace
+            - ./frontend:/workspace
             - node_modules:/workspace/node_modules
-
         ports:
             - "5173:5173"
-
         environment:
             - NODE_ENV=development
             - CHOKIDAR_USEPOLLING=true
-
         restart: unless-stopped
-
         stdin_open: true
         tty: true
-
         command: ["bash", "/workspace/init.sh"]
+    
+    backend:
+        build:
+            context: .
+            dockerfile: backend/Dockerfile
+        container_name: etoile-backend
+        working_dir: /workspace
+        volumes:
+            - ./backend:/workspace
+        ports:
+            - "127.0.0.1:8000:8000"
+        restart: unless-stopped
+        stdin_open: true
+        tty: true
+        command: ["ash", "/workspace/init.sh"]
 
 volumes:
     node_modules:
